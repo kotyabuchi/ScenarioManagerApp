@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { Metadata } from 'next';
 import { Link } from '@nextui-org/react';
 import SigninForm from '@/app/ui/auth/signin-form';

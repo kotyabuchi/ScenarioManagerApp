@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { Metadata } from 'next';
 import SignupForm from '@/app/ui/auth/signup-form';
 import { Link } from '@nextui-org/react';
