@@ -53,7 +53,7 @@ const enumRefine = (
 };
 
 // User
-const userSchema = createSelectSchema(users, {
+export const userSchema = createSelectSchema(users, {
   id: cuidSchema,
   discordId: z
     .string()
@@ -68,7 +68,7 @@ const userSchema = createSelectSchema(users, {
   bio: z.string().nullish(),
   avatar: urlSchema.nullish(),
   role: z
-    .nativeEnum(Role)
+    .string()
     .default(Role.MEMBER)
     .refine((data) => enumRefine(Role, data)),
   createdAt: z.date(),
@@ -84,6 +84,11 @@ export const updateUserSchema = selectUserSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+});
+export const registerUserSchema = userSchema.pick({
+  username: true,
+  discordId: true,
+  password: true,
 });
 
 // Scenario

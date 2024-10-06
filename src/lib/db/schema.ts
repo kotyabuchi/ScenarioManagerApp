@@ -29,7 +29,6 @@ export const users = sqliteTable(
     username: text('user_name').notNull().unique(),
     nickname: text('nickname').notNull(),
     password: text('password').notNull(),
-    passwordSalt: text('password_salt').notNull(),
     bio: text('bio'),
     avatar: text('avatar'),
     role: text('role', { enum: Object.values(Role) as [string, ...string[]] })
@@ -342,6 +341,10 @@ export const videoLinkRelations = relations(videoLinks, ({ one }) => ({
   session: one(gameSessions, {
     fields: [videoLinks.sessionId],
     references: [gameSessions.id],
+  }),
+  user: one(users, {
+    fields: [videoLinks.createdById],
+    references: [users.id],
   }),
 }));
 

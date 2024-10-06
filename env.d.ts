@@ -2,4 +2,15 @@
 // by running `wrangler types --env-interface CloudflareEnv env.d.ts`
 
 interface CloudflareEnv {
+  DB: D1Database;
 }
+
+declare global {
+  var DB: D1Database;
+
+  namespace NodeJS {
+    interface ProcessEnv extends CloudflareEnv {}
+  }
+}
+
+export {};
