@@ -4,7 +4,7 @@ import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import bcryptjs from 'bcryptjs';
-import { getUserByUsername } from './lib/db/dao/userDao';
+import { getUserByUsername } from '@/lib/db/dao/userDao';
 
 export const {
   handlers: { GET, POST },
@@ -16,25 +16,25 @@ export const {
   providers: [
     Credentials({
       async authorize(credentials) {
-        console.log('start authorize');
-
         const parsedCredentials = z
           .object({ username: z.string(), password: z.string() })
           .safeParse(credentials);
 
         if (parsedCredentials.success) {
-          const { username, password } = parsedCredentials.data;
+          const { username, password: inputPassword } = parsedCredentials.data;
           const user = await getUserByUsername(username);
+
           if (!user) return null;
+
+          const { password, ...userWithoutPassword } = user;
           const passwordsMatch = await bcryptjs.compare(
-            password,
-            user.password
+            inputPassword,
+            password
           );
 
-          if (passwordsMatch) return user;
+          if (passwordsMatch) return userWithoutPassword;
         }
 
-        console.log('Invalid credentials');
         return null;
       },
     }),
