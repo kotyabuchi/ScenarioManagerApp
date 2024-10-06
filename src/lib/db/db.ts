@@ -27,14 +27,14 @@ function getLocalD1DB() {
 
 export function getDb() {
   if (!db) {
-    if (process.env.NODE_ENV === 'development') {
-      const sqlite = new Database(getLocalD1DB());
-      db = drizzleSqlite(sqlite, { schema }) as unknown as DbType;
-    } else {
+    if (process.env.NODE_ENV === 'production') {
       if (!process.env.DB) {
         throw new Error('DBが存在しません。');
       }
+    } else {
       db = drizzle(process.env.DB as unknown as D1Database, { schema });
+      const sqlite = new Database(getLocalD1DB());
+      db = drizzleSqlite(sqlite, { schema }) as unknown as DbType;
     }
   }
   return db;
